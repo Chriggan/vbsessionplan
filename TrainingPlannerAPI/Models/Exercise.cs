@@ -8,7 +8,7 @@ public class Exercise
     public string Instructions { get; set; } = "";
     public Skills PrimarySkill { get; set; } = Skills.Passing;
     public Skills[] SecondarySkills { get; set; } = [];
-    public byte[]? GIFImage { get; set; }
+    public Blob GIFImage { get; set; } = new Blob();
 }
 
 
