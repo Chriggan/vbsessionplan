@@ -4,6 +4,6 @@ A tool for planning your volleyball practices.
 
 - Database with exercises
 - CRUD
-- Select if exercise should remain private, public or internal
+- Distribution: Select if exercise should remain private, public or internal
 - Users (authorization)
 - ...and more TBD
