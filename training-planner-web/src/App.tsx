@@ -22,7 +22,7 @@ function App() {
     <main>
       <h1>Components of vbsessionplanner</h1>
       <section>
-        <h2>Drill Component</h2>
+        <h2>&lt;Drill /&gt;</h2>
         <DrillPreviewCard drill={sampleDrill} />
       </section>
     </main>
