@@ -6,38 +6,38 @@ using vbsessionplan.Contracts;
 namespace vbsessionplan.DAO;
 
 
-public class ExercisesDAO : IExercisesDAO
+public class DrillsDAO : IDrillsDAO
 {
     private readonly MongoClient _client;
-    private readonly IMongoCollection<Exercise> _exerciseCollection;
-    public ExercisesDAO(MongoClient client)
+    private readonly IMongoCollection<Drill> _DrillCollection;
+    public DrillsDAO(MongoClient client)
     {
         _client = client;
-        _exerciseCollection = _client
-            .GetDatabase("ExerciseData")
-            .GetCollection<Exercise>("Exercises");
+        _DrillCollection = _client
+            .GetDatabase("SessionPlanner")
+            .GetCollection<Drill>("drills");
     }
 
-    public async Task<List<Exercise>> GetExercises()
+    public async Task<List<Drill>> GetDrills()
     {
-        var filter = Builders<Exercise>.Filter.Empty;
-        var exercises = await _exerciseCollection
+        var filter = Builders<Drill>.Filter.Empty;
+        var Drills = await _DrillCollection
             .Find(filter)
             .ToListAsync();
-        return exercises;
+        return Drills;
     }
-    public async Task<Exercise> GetExerciseById(string id)
+    public async Task<Drill> GetDrillById(string id)
     {
-        var exercise = await _exerciseCollection
-            .Find(Builders<Exercise>.Filter.Eq("_id", id))
+        var Drill = await _DrillCollection
+            .Find(Builders<Drill>.Filter.Eq("_id", id))
             .FirstOrDefaultAsync();
 
-        return exercise;
+        return Drill;
     }
 
-    public async Task PostExercise(PostExerciseRequest request)
+    public async Task PostDrill(PostDrillRequest request)
     {
-        Exercise exercise = new()
+        Drill Drill = new()
         {
             Title = request.Title,
             Instructions = request.Instructions,
@@ -47,20 +47,20 @@ public class ExercisesDAO : IExercisesDAO
             RecommendedDuration = request.RecommendedDuration,
         };
 
-        await _exerciseCollection
-            .InsertOneAsync(exercise);
+        await _DrillCollection
+            .InsertOneAsync(Drill);
     }
 
-    public async Task PatchExercise(string id, PatchExerciseRequest request)
+    public async Task PatchDrill(string id, PatchDrillRequest request)
     {
         ObjectId objectId;
         try { objectId = ObjectId.Parse(id); }
         catch (FormatException ex) { throw new Exception("Object id invalid formatted.", ex); }
 
-        var update = Builders<Exercise>.Update.Combine();
+        var update = Builders<Drill>.Update.Combine();
 
-        var patchExerciseProperties = typeof(PatchExerciseRequest).GetProperties();
-        foreach (var property in patchExerciseProperties)
+        var patchDrillProperties = typeof(PatchDrillRequest).GetProperties();
+        foreach (var property in patchDrillProperties)
         {
             object? value = property.GetValue(request, null);
             if (value is null)
@@ -76,8 +76,8 @@ public class ExercisesDAO : IExercisesDAO
         // if (title != null)
         //     update = update.Set("title", title);
 
-        await _exerciseCollection
-            .UpdateOneAsync(Builders<Exercise>.Filter.Eq("_id", objectId), update);
+        await _DrillCollection
+            .UpdateOneAsync(Builders<Drill>.Filter.Eq("_id", objectId), update);
     }
 
 }

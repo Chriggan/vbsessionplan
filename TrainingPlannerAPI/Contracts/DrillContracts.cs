@@ -1,5 +1,5 @@
 namespace vbsessionplan.Contracts;
-public record PostExerciseRequest(
+public record PostDrillRequest(
     string Title,
     string Instructions,
     int ParticipantsMin,
@@ -7,7 +7,7 @@ public record PostExerciseRequest(
     int? MinimumDuration,
     int? RecommendedDuration
 );
-public record PatchExerciseRequest(
+public record PatchDrillRequest(
     string? Title,
     string? Instructions,
     int? ParticipantsMin,

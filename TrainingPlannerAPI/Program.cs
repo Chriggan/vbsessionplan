@@ -23,7 +23,7 @@ catch (Exception ex)
 
 
 
-builder.Services.AddSingleton<IExercisesDAO, ExercisesDAO>(serviceProvider => new ExercisesDAO(client));
+builder.Services.AddSingleton<IDrillsDAO, DrillsDAO>(serviceProvider => new DrillsDAO(client));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

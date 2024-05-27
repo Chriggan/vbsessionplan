@@ -4,4 +4,5 @@ export type Drill = {
   description: string;
   atleastMinutes: number;
   recommendedMinutes: number;
+  skills: Array<string>;
 };
