@@ -9,11 +9,11 @@ namespace vbsessionplan.DAO;
 public class DrillsDAO : IDrillsDAO
 {
     private readonly MongoClient _client;
-    private readonly IMongoCollection<Drill> _DrillCollection;
+    private readonly IMongoCollection<Drill> _drillCollection;
     public DrillsDAO(MongoClient client)
     {
         _client = client;
-        _DrillCollection = _client
+        _drillCollection = _client
             .GetDatabase("SessionPlanner")
             .GetCollection<Drill>("drills");
     }
@@ -21,23 +21,28 @@ public class DrillsDAO : IDrillsDAO
     public async Task<List<Drill>> GetDrills()
     {
         var filter = Builders<Drill>.Filter.Empty;
-        var Drills = await _DrillCollection
+        var drills = await _drillCollection
             .Find(filter)
             .ToListAsync();
-        return Drills;
+        return drills;
     }
     public async Task<Drill> GetDrillById(string id)
     {
-        var Drill = await _DrillCollection
-            .Find(Builders<Drill>.Filter.Eq("_id", id))
+        ObjectId objectId;
+        try { objectId = ObjectId.Parse(id); }
+        catch (FormatException ex) { throw new Exception("Object id invalid formatted.", ex); }
+
+        var drill = await _drillCollection
+            .Find(Builders<Drill>.Filter.Eq("_id", objectId))
             .FirstOrDefaultAsync();
 
-        return Drill;
+        Console.WriteLine(drill);
+        return drill;
     }
 
     public async Task PostDrill(PostDrillRequest request)
     {
-        Drill Drill = new()
+        Drill drill = new()
         {
             Title = request.Title,
             Instructions = request.Instructions,
@@ -47,8 +52,8 @@ public class DrillsDAO : IDrillsDAO
             RecommendedDuration = request.RecommendedDuration,
         };
 
-        await _DrillCollection
-            .InsertOneAsync(Drill);
+        await _drillCollection
+            .InsertOneAsync(drill);
     }
 
     public async Task PatchDrill(string id, PatchDrillRequest request)
@@ -76,7 +81,7 @@ public class DrillsDAO : IDrillsDAO
         // if (title != null)
         //     update = update.Set("title", title);
 
-        await _DrillCollection
+        await _drillCollection
             .UpdateOneAsync(Builders<Drill>.Filter.Eq("_id", objectId), update);
     }
 

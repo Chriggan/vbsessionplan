@@ -21,12 +21,14 @@ public class DrillsController(ILogger<DrillsController> logger, IDrillsDAO drill
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<IEnumerable<Drill>>> GetDrills(string id)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Drill>> GetDrillById(string id)
     {
         return Ok(await _drillsDAO.GetDrillById(id));
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> PostDrills(PostDrillRequest request)
     {
         await _drillsDAO.PostDrill(request);

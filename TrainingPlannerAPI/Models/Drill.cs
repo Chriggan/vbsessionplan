@@ -1,10 +1,13 @@
 using System.Reflection.Metadata;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace vbsessionplan.Models;
 public class Drill
 {
-    public ObjectId Id { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
     public string Title { get; set; } = "";
     public string Instructions { get; set; } = "";
     public int ParticipantsMin { get; set; }
