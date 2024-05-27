@@ -7,9 +7,11 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  IconButton,
   Tooltip,
   Typography,
 } from "@mui/material";
+import AddCardIcon from "@mui/icons-material/AddCard";
 
 const DrillPreviewCard = ({ drill }: { drill: Drill }) => {
   console.log(drill);
@@ -19,10 +21,10 @@ const DrillPreviewCard = ({ drill }: { drill: Drill }) => {
   });
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, padding: 1 }} variant="outlined">
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CardMedia
-          sx={{ height: 180 }}
+          sx={{ height: 240 }}
           image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUy_7M3ou6-lWO8ti6tLWB8YZKjFiVTl5gauVIKWJAIg&s"
           title="green iguana"
         />
@@ -37,8 +39,14 @@ const DrillPreviewCard = ({ drill }: { drill: Drill }) => {
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
+          <Tooltip
+            title="Find out more about this drill"
+            arrow
+            enterDelay={500}
+            leaveDelay={200}
+          >
+            <Button size="small">Details</Button>
+          </Tooltip>
           <Tooltip
             title={formattedSkills}
             arrow
@@ -46,6 +54,16 @@ const DrillPreviewCard = ({ drill }: { drill: Drill }) => {
             leaveDelay={200}
           >
             <Button size="small">Skills</Button>
+          </Tooltip>
+          <Tooltip
+            title={formattedSkills}
+            arrow
+            enterDelay={500}
+            leaveDelay={200}
+          >
+            <IconButton>
+              <AddCardIcon />
+            </IconButton>
           </Tooltip>
         </CardActions>
       </Box>
