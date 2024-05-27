@@ -5,30 +5,25 @@ using vbsessionplan.DAO;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration["MongoDB:ConnectionString"];
-// var settings = MongoClientSettings.FromConnectionString(connectionUri);
+var settings = MongoClientSettings.FromConnectionString(connectionString);
 
-// settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+settings.ServerApi = new ServerApi(ServerApiVersion.V1);
 
-// var client = new MongoClient(settings);
+var client = new MongoClient(settings);
 
-// try {
-//   var result = client.GetDatabase("admin").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
-//   Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
-// } catch (Exception ex) {
-//   Console.WriteLine(ex);
-// }
-
-builder.Services.AddSingleton<IMongoClient>(s => 
-    new MongoClient(connectionString)
-);
-builder.Services.AddScoped(sp =>
+try
 {
-    var client = sp.GetRequiredService<IMongoClient>();
-    var database = "";
-    return client.GetDatabase(database);
-});
+    var result = client.GetDatabase("admin").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
+    Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+}
 
-builder.Services.AddSingleton<IExercisesDAO, ExercisesDAO>();
+
+
+builder.Services.AddSingleton<IExercisesDAO, ExercisesDAO>(serviceProvider => new ExercisesDAO(client));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
